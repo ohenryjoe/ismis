@@ -1,0 +1,213 @@
+{% extends 'components/base.html' %}
+{% load widget_tweaks %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block styles %}
+    <!-- Forn-wizard css-->
+    <link href="{% static '' %}assets/plugins/form-wizard/css/forn-wizard.css" rel="stylesheet"/>
+    <link href="{% static '' %}assets/plugins/formwizard/smart_wizard.css" rel="stylesheet">
+    <link href="{% static '' %}assets/plugins/formwizard/smart_wizard_theme_dots.css" rel="stylesheet">
+    <style>
+        .section-card {
+            min-height: 480px;
+        }
+
+    </style>
+{% endblock styles %}
+
+{% block body %}
+    <!--Page header-->
+    <div class="page-header">
+        <div class="page-leftheader">
+            <h4 class="page-title">New Designation</h4>
+        </div>
+        <div class="page-rightheader ms-auto d-lg-flex d-none">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)" class="d-flex">
+                    <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                        <path d="M0 0h24v24H0V0z" fill="none"></path>
+                        <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 15h-2v-6H9v6H7v-7.81l5-4.5 5 4.5V18z"></path>
+                        <path d="M7 10.19V18h2v-6h6v6h2v-7.81l-5-4.5z" opacity=".3"></path>
+                    </svg>
+                    <span class="breadcrumb-icon"> HRMS</span></a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Designations</a></li>
+                <li class="breadcrumb-item active" aria-current="page">New Designation</li>
+            </ol>
+        </div>
+    </div>
+    <!--End Page header-->
+
+
+    <!--Row -->
+    <div class="row ">
+        <div class="col-md-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <form id="wizard3">
+                        <h3>Job Information</h3>
+
+                        <form class="col-md-5 col-lg-4" method="post" id="DesignationForm">
+                            {% csrf_token %}
+
+                            <section>
+                                <div class="section-card">
+
+                                    <div class="row mt-1">
+                                        <div class="col-md-10 col-lg-8 mt-3">
+                                            {% render_field form.title class="form-control" placeholder="Enter Job Title" %}
+                                        </div>
+
+                                        <div class="col-md-2 col-lg-4 mt-3">
+                                            {% render_field form.title class="form-control" placeholder="Enter Short Job Title" %}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-5">
+                                        <div class="col-md-12 col-lg-12 mt-3">
+                                            {% render_field form.job_summary|attr:"rows:3" class="form-control" placeholder="Enter job summary here" %}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-5">
+                                        <div class="col-md-12 col-lg-12 mt-3">
+                                            {% render_field form.job_description|attr:"rows:8" class="form-control" placeholder="Enter job description here" %}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </section>
+
+                            <h3>Job Location</h3>
+                            <section>
+                                <div class="section-card">
+                                    <div class="row mt-1">
+
+                                        <div class="col-md-5 col-lg-4 mt-3">
+                                            {{ form.directorate|as_crispy_field }}
+                                        </div>
+
+                                        <div class="col-md-5 col-lg-4 mt-3">
+                                            {{ form.department|as_crispy_field }}
+                                        </div>
+                                        <div class="col-md-5 col-lg-4 mt-3">
+                                            {{ form.division|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="col-md-5 col-lg-4 mt-3">
+                                            {{ form.section|as_crispy_field }}
+                                        </div>
+                                        <div class="col-md-5 col-lg-4 mt-3">
+                                            {{ form.headed_entity|as_crispy_field }}
+                                        </div>
+
+                                        <div class="col-md-5 col-lg-4 mt-3">
+                                            {{ form.max_holders|as_crispy_field }}
+                                        </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-5 col-lg-4 mt-3">
+                                            {{ form.supervisor|as_crispy_field }}
+                                        </div>
+
+
+                                        <div class="col-md-3 col-lg-2 mt-3 align-baseline">
+                                            <label>Active?</label>
+                                            {{ form.active|as_crispy_field }}
+                                        </div>
+
+                                        <div class="col-md-3 col-lg-2 mt-3 align-baseline">
+                                            <label>Probational?</label>
+                                            {{ form.probational|as_crispy_field }}
+                                        </div>
+
+                                        <div class="col-md-5 col-lg-4 mt-3">
+                                            {{ form.probation_period|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div>
+                                            {% if form.errors %}
+                                                {% for field in form %}
+                                                    <div class="fieldWrapper">
+                                                        {{ field.errors }}
+                                                        {{ field.label_tag }} {{ field }}
+                                                        {% if field.help_text %}
+                                                            <p class="help">{{ field.help_text|safe }}</p>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-primary" type="submit">Save Job</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </form>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/Row-->
+
+
+{% endblock body %}
+
+{% block scripts %}
+    <script>
+        function getDepartment(directorate_id) {
+            let $ = django.jQuery;
+            $.get('/area/departments/' + directorate_id, function (resp) {
+                let department_list = '<option value="" selected="">---------</option>'
+                $.each(resp.data, function (i, item) {
+                    department_list += '<option value="' + item.id + '">' + item.name + '</option>'
+                });
+                $('#id_department').html(department_list);
+            });
+        }
+
+        function getDivision(department_id) {
+            let $ = django.jQuery;
+            $.get('/area/divisions/' + department_id, function (resp) {
+                let division_list = '<option value="" selected="">---------</option>'
+                $.each(resp.data, function (i, item) {
+                    division_list += '<option value="' + item.id + '">' + item.name + '</option>'
+                });
+                $('#id_division').html(division_list);
+            });
+        }
+
+        function getSection(divison_id) {
+            let $ = django.jQuery;
+            $.get('/area/sections/' + division_id, function (resp) {
+                let section_list = '<option value="" selected="">---------</option>'
+                $.each(resp.data, function (i, item) {
+                    section_list += '<option value="' + item.id + '">' + item.name + '</option>'
+                });
+                $('#id_section').html(section_list);
+            });
+        }
+    </script>
+
+    <!-- Jquery.steps js -->
+    <script src="{% static '' %}assets/plugins/jquery-steps/jquery.steps.min.js"></script>
+    <script src="{% static '' %}assets/plugins/parsleyjs/parsley.min.js"></script>
+
+    <!-- Forn-wizard js-->
+    <script src="{% static '' %}assets/plugins/formwizard/jquery.smartWizard.js"></script>
+    <script src="{% static '' %}assets/plugins/formwizard/fromwizard.js"></script>
+
+    <!--Accordion-Wizard-Form js-->
+    <script src="{% static '' %}assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js"></script>
+    <script src="{% static '' %}assets/js/form-wizard.js"></script>
+    <script src="{% static '' %}assets/js/form-wizard2.js"></script>
+
+
+{% endblock scripts %}

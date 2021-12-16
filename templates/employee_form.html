@@ -1,0 +1,47 @@
+{% extends 'components/base.html' %}
+
+{% block body %}
+{% load widget_tweaks %}
+    <div class="card mt-5">
+      <div class="card-header">
+           <h2>New Employee Form</h2>
+      </div>
+    <div class="card-body">
+  <form class="col-md-6" method="post" id="personForm">
+    {% csrf_token %}
+    <table>
+      <!-- {{ form.as_table }} -->
+    </table>
+ {% for field in form.visible_fields %}
+   <div class="form-group">
+  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+  {{ field|add_class:'form-control' }}
+  {% for error in field.errors %}
+    <span class="text-warning help-block">{{ error }}</span>
+  {% endfor %}
+   </div>
+ {% endfor %}
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'employeelist' %}">Home</a>
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_country").change(function () {
+      var url = $("#personForm").attr("data-cities-url");
+      var countryId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'country': countryId
+        },
+        success: function (data) {
+          $("#id_city").html(data);
+        }
+      });
+
+    });
+  </script>
+    </div>
+{% endblock %}

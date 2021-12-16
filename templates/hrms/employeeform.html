@@ -1,0 +1,301 @@
+{% extends 'components/base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block styles %}
+    <!-- Forn-wizard css-->
+    <link href="{% static '' %}assets/plugins/form-wizard/css/forn-wizard.css" rel="stylesheet"/>
+    <link href="{% static '' %}assets/plugins/formwizard/smart_wizard.css" rel="stylesheet">
+    <link href="{% static '' %}assets/plugins/formwizard/smart_wizard_theme_dots.css" rel="stylesheet">
+      <style>
+    .section-card {
+        min-height: 350px;
+    }
+
+    </style>
+{% endblock styles %}
+
+{% block body %}
+    <!--Page header-->
+    <div class="page-header">
+        <div class="page-leftheader">
+            <h4 class="page-title">New Employee</h4>
+        </div>
+        <div class="page-rightheader ms-auto d-lg-flex d-none">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)" class="d-flex">
+                    <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                        <path d="M0 0h24v24H0V0z" fill="none"></path>
+                        <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 15h-2v-6H9v6H7v-7.81l5-4.5 5 4.5V18z"></path>
+                        <path d="M7 10.19V18h2v-6h6v6h2v-7.81l-5-4.5z" opacity=".3"></path>
+                    </svg>
+                    <span class="breadcrumb-icon"> HRMS</span></a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Employees</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Onboard New Employee</li>
+            </ol>
+        </div>
+    </div>
+    <!--End Page header-->
+    <!--Row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        OnBoard New Employee
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="wizard1">
+                        <form class="col-md-5" method="post" id="EmployeeForm">
+                            {% csrf_token %}
+                            <h3>Personal Information</h3>
+                            <section>
+                                <div class="section-card">
+                                <div class="row mt-5">
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="title">
+                                        {{ form.title|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="firstname">
+                                        {{ form.first_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-5 col-lg-4 mt-3" id="middlename">
+                                        {{ form.middle_name|as_crispy_field }}
+                                    </div>
+
+                                </div>
+{#                                religion = models.CharField(max_length=255, blank=True, null=True)#}
+{#                                email = models.CharField(max_length=255, blank=True, null=True)#}
+                                <div class="row mt-5">
+                                    <div class="col-md-5 col-lg-4 mt-3" id="nationality">
+                                        {{ form.nationality|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" type="date" id="dob">
+                                        {{ form.dob|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="gender">
+                                        {{ form.gender|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-5 col-lg-4  mt-3" id="religion">
+                                        {{ form.religion|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="marital_status">
+                                        {{ form.marital_status|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="sne">
+                                        {{ form.employee_sne_status|as_crispy_field }}
+                                    </div>
+                                </div>
+
+{#                                <div class="row mt-5">#}
+{##}
+{#                                    <div class="col-md-5 col-lg-4" id="nssf">#}
+{#                                        {{ form.nssf|as_crispy_field }}#}
+{#                                    </div>#}
+{##}
+{##}
+{#                                    <div class="col-md-5 col-lg-4" id="tin">#}
+{#                                        {{ form.tin|as_crispy_field }}#}
+{#                                    </div>#}
+{##}
+{##}
+{#                                    <div class="col-md-5 col-lg-4" id="permit">#}
+{#                                        {{ form.passport|as_crispy_field }}#}
+{#                                    </div>#}
+{#                                </div>#}
+
+                                </div>
+                            </section>
+
+                            <h3>Job Information</h3>
+                            <section>
+                                <div class="section-card">
+                                <div class="row mt-5">
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="eployee_number">
+                                        {{ form.employee_number|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="designation">
+                                        {{ form.designation|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="employment_type">
+                                        {{ form.employment_term|as_crispy_field }}
+                                    </div>
+                                </div>
+
+                                 <div class="row mt-5">
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="employment_term">
+                                        {{ form.employment_term|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="employment_type">
+                                        {{ form.employment_type|as_crispy_field }}
+                                    </div>
+
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="employee_sne_status">
+
+                                    </div>
+                                 </div>
+                                </div>
+                            </section>
+
+                            <h3>Work Information</h3>
+                            <section>
+                                <div class="section-card">
+                                <div class="row mt-5">
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="firstname">
+                                        {{ form.first_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-5 col-lg-4 mt-3" id="middlename">
+                                        {{ form.middle_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-5 col-lg-4 mt-3" id="lastname">
+                                        {{ form.last_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-5 col-lg-4 mt-3" id="othername">
+                                        {{ form.other_names|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" type="date" id="dob">
+                                        {{ form.dob|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="gender">
+                                        {{ form.gender|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    {#                                <label for="nationality" class="font-weight-bold">Nationality</label>#}
+                                    <div class="col-md-5 col-lg-4 mt-3" id="nationality">
+                                        {{ form.nationality|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="marital_status">
+                                        {{ form.marital_status|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="nin">
+                                        {{ form.nin|as_crispy_field }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-5">
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="nssf">
+                                        {{ form.nssf|as_crispy_field }}
+                                    </div>
+
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="tin">
+                                        {{ form.tin|as_crispy_field }}
+                                    </div>
+
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="permit">
+                                        {{ form.passport|as_crispy_field }}
+                                    </div>
+                                </div>
+                                </div>
+                            </section>
+                             <h3>User Information</h3>
+                            <section>
+                                <div class="section-card">
+                                <div class="row mt-5">
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="firstname">
+                                        {{ form.first_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-5 col-lg-4 mt-3" id="middlename">
+                                        {{ form.middle_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-5 col-lg-4 mt-3" id="lastname">
+                                        {{ form.last_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-5 col-lg-4 mt-3" id="othername">
+                                        {{ form.other_names|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" type="date" id="dob">
+                                        {{ form.dob|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="gender">
+                                        {{ form.gender|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    {#                                <label for="nationality" class="font-weight-bold">Nationality</label>#}
+                                    <div class="col-md-5 col-lg-4 mt-3" id="nationality">
+                                        {{ form.nationality|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="marital_status">
+                                        {{ form.marital_status|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="nin">
+                                        {{ form.nin|as_crispy_field }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-5">
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="nssf">
+                                        {{ form.nssf|as_crispy_field }}
+                                    </div>
+
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="tin">
+                                        {{ form.tin|as_crispy_field }}
+                                    </div>
+
+
+                                    <div class="col-md-5 col-lg-4 mt-3" id="permit">
+                                        {{ form.passport|as_crispy_field }}
+                                    </div>
+                                </div>
+                                </div>
+                            </section>
+                        </form>
+                    </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!--/Row-->
+
+
+{% endblock body %}
+
+{% block scripts %}
+
+    <!-- Jquery.steps js -->
+    <script src="{% static '' %}assets/plugins/jquery-steps/jquery.steps.min.js"></script>
+    <script src="{% static '' %}assets/plugins/parsleyjs/parsley.min.js"></script>
+
+    <!-- Forn-wizard js-->
+    <script src="{% static '' %}assets/plugins/formwizard/jquery.smartWizard.js"></script>
+    <script src="{% static '' %}assets/plugins/formwizard/fromwizard.js"></script>
+
+    <!--Accordion-Wizard-Form js-->
+    <script src="{% static '' %}assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js"></script>
+    <script src="{% static '' %}assets/js/form-wizard.js"></script>
+    <script src="{% static '' %}assets/js/form-wizard2.js"></script>
+{% endblock scripts %}
