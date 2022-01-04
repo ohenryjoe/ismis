@@ -33,6 +33,7 @@ NATIONALITY_CHOICES = [
     ('Tanzania', 'Tanzania'),
     ('Non EAC Country', 'Non EAC Country'),
 ]
+
 MONTHS = [
     ('Jan', 'January'),
     ('Feb', 'February'),
@@ -81,8 +82,11 @@ DAY_CHOICES = [
     ('31', '31st'),
 ]
 
+# Give different name to the levels (like alias)
+
 
 class EntityLevel(models.Model):
+    # Determine the chain in corporate structure [Level 1, Level 2]
     rank = models.IntegerField()
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -102,6 +106,7 @@ class EntityLevel(models.Model):
 
 
 class CorporateEntity(models.Model):
+    # Determine the chain in corporate structure [CEO -> Level 1(Entity), Directorate -> Level 2(Entity)] [Both are groups]
     level = models.ForeignKey(EntityLevel, null=True, blank=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -120,6 +125,7 @@ class CorporateEntity(models.Model):
 
 
 class Directorates(models.Model):
+    # Alternate method (Corporate division above departments)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField()
@@ -137,6 +143,7 @@ class Directorates(models.Model):
 
 
 class Departments(models.Model):
+    # alternate
     directorate = models.ForeignKey(Directorates, blank=True, null=True, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -155,6 +162,7 @@ class Departments(models.Model):
 
 
 class Divisions(models.Model):
+    # alternate
     directorate = models.ForeignKey(Directorates, blank=True, null=True, on_delete=models.DO_NOTHING)
     department = models.ForeignKey(Departments, blank=True, null=True, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=255)
@@ -170,6 +178,7 @@ class Divisions(models.Model):
 
 
 class Sections(models.Model):
+    # alternate
     directorate = models.ForeignKey(Directorates, blank=True, null=True, on_delete=models.DO_NOTHING)
     department = models.ForeignKey(Departments, blank=True, null=True, on_delete=models.DO_NOTHING)
     division = models.ForeignKey(Divisions, blank=True, null=True, on_delete=models.DO_NOTHING)
@@ -190,10 +199,11 @@ class Sections(models.Model):
 
 class SalaryScales(models.Model):
     scale = models.CharField(max_length=255)
-    rank_order = models.PositiveIntegerField()  # e.g 1, 2, 3 etc the smaller, the more senior
+    rank_order = models.PositiveIntegerField()  # e.g 1, 2, 3 etc the smaller, the more senior # unique as well
     heads = models.ForeignKey(EntityLevel, blank=True, null=True,
                               on_delete=models.SET_NULL)  # e.g 1, 2, 3 etc level id headed by salary scale
-    rank_title = models.PositiveIntegerField()  # e.g Principal Officer
+    # Salary scale bound to a designation
+    rank_title = models.CharField()  # e.g Principal Officer
     rank_description = models.TextField(blank=True, null=True)  # e.g Heads a Section
     created_by = models.PositiveSmallIntegerField(blank=True, null=True)
     updated_by = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -211,10 +221,13 @@ class SalaryScales(models.Model):
 class Designations(models.Model):
     title = models.CharField(max_length=255)
     short_name = models.CharField(max_length=255, blank=True, null=True)
+    
+    # Where a job is placed might not always be sections
     directorate = models.ForeignKey(Directorates, blank=True, null=True, on_delete=models.CASCADE,related_name='designation_directorate',)
     department = models.ForeignKey(Departments, blank=True, null=True, on_delete=models.CASCADE,related_name='designation_department')
     division = models.ForeignKey(Divisions, blank=True, null=True, on_delete=models.CASCADE,related_name='designation_division')
     section = models.ForeignKey(Sections, blank=True, null=True, on_delete=models.CASCADE,related_name='designation_section')
+    
     salary_scale = models.ForeignKey(SalaryScales, on_delete=models.CASCADE)
     supervisor = models.ForeignKey('self', on_delete=models.CASCADE)
     probational = models.BooleanField()
@@ -223,6 +236,7 @@ class Designations(models.Model):
     job_description = models.TextField(blank=True, null=True)
     max_holders = models.IntegerField()
     active = models.BooleanField()
+    
     headed_entity = models.ForeignKey(EntityLevel, blank=True, null=True,
                                       on_delete=models.SET_NULL)  # the id of headed entity
     created_by = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -256,6 +270,7 @@ class Designations(models.Model):
 
 
 class Titles(models.Model):
+    # We can get it with constant
     title = models.CharField(max_length=50,
                              choices=TITLE_CHOICES,
                              default="Mr")
@@ -272,7 +287,7 @@ class Titles(models.Model):
         return self.title + '. '
 
 
-class Genders(models.Model):
+class Genders(models.Model):    # We can get it with constant
     title = models.CharField(max_length=255)
     created_by = models.PositiveBigIntegerField(blank=True, null=True)
     updated_by = models.PositiveBigIntegerField(blank=True, null=True)
@@ -288,6 +303,7 @@ class Genders(models.Model):
 
 
 class Addressable(models.Model):
+    # adreess fields needed
     model_name = models.CharField(max_length=255)
     created_by = models.PositiveBigIntegerField(blank=True, null=True)
     updated_by = models.PositiveBigIntegerField(blank=True, null=True)
@@ -300,6 +316,7 @@ class Addressable(models.Model):
 
 
 class Contactable(models.Model):
+    # Same model for the address
     model_name = models.CharField(max_length=255)
     created_by = models.PositiveBigIntegerField(blank=True, null=True)
     updated_by = models.PositiveBigIntegerField(blank=True, null=True)
@@ -312,6 +329,7 @@ class Contactable(models.Model):
 
 
 class Commentable(models.Model):
+    # Same as address
     model_name = models.CharField(max_length=255)
     created_by = models.PositiveBigIntegerField(blank=True, null=True)
     updated_by = models.PositiveBigIntegerField(blank=True, null=True)
@@ -324,6 +342,10 @@ class Commentable(models.Model):
 
 
 class EmploymentStatuses(models.Model):
+    # Special Neeeds Employees ['Active', 'Retired']
+    # current_status = 'retire' in Employee model
+    # Logs
+
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -335,6 +357,8 @@ class EmploymentStatuses(models.Model):
 
 
 class EmployeeSNEStatuses(models.Model):
+    
+    # Special Neeeds Employees ['Blind', 'Physically Handicapped']
     code = models.CharField(max_length=4)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -350,6 +374,7 @@ class EmployeeSNEStatuses(models.Model):
 
 
 class EmploymentTenure(models.Model):
+    # Contract, Permanent e.t.c
     code = models.CharField(max_length=4)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -455,9 +480,7 @@ class Addresses(models.Model):
         PERMANENT = 'P', 'Personal'
         RESIDENCE = 'H', 'Home'
         WORK = 'W', 'Work'
-
-    addressable = models.PositiveBigIntegerField()
-    addressable_type = models.CharField(max_length=255)
+        
     country = models.CharField(max_length=255)
     region = models.CharField(max_length=255)
     subregion = models.CharField(max_length=255)
@@ -501,23 +524,13 @@ class EmployeeBanks(models.Model):
     def __str__(self):
         return self.bank_name
 
-
-class Comments(models.Model):
-    commentable = ForeignKey(Commentable, on_delete=models.DO_NOTHING)
-    body = models.TextField()
-    user = models.IntegerField
-    commentable_type = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now_add=True, null=True)
-    deleted_at = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'comments'
+    
+# RelatedPerson Table that consist of information related to related person
 
 
 class Contacts(models.Model):
-    contactable = models.ForeignKey(Contactable, on_delete=models.DO_NOTHING)
-    contactable_type = models.CharField(max_length=255)
+    employee = models.ForeignKey(Employee)
+    contactable_type = models.ForeignKey(RelationShip) # spouse, myself, parents
     value = models.CharField(max_length=255)
     kind = models.CharField(max_length=9)
     type = models.CharField(max_length=8)
@@ -532,6 +545,7 @@ class Contacts(models.Model):
 
 
 class Delegations(models.Model):
+    # Work Delegations
     substantive = models.PositiveBigIntegerField()
     delegated = models.PositiveBigIntegerField()
     employee = models.ForeignKey(Employees, on_delete=models.CASCADE)
@@ -551,6 +565,7 @@ class Delegations(models.Model):
 
 
 class Relationships(models.Model):
+    # Spouse, Father, Brother
     title = models.CharField(max_length=255)
     created_by = models.PositiveBigIntegerField(blank=True, null=True)
     updated_by = models.PositiveBigIntegerField(blank=True, null=True)
@@ -565,23 +580,8 @@ class Relationships(models.Model):
         return self.title
 
 
-class DocumentCategories(models.Model):
-    title = models.CharField(max_length=255)
-    non_employee = models.BooleanField()
-    created_by = models.PositiveBigIntegerField(blank=True, null=True)
-    updated_by = models.PositiveBigIntegerField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now_add=True, null=True)
-    deleted_at = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'document_categories'
-
-    def __str__(self):
-        return self.title
-
-
 class DocumentTypes(models.Model):
+    # 
     title = models.CharField(max_length=255)
     category = models.ForeignKey(DocumentCategories, on_delete=models.CASCADE)
     created_by = models.PositiveBigIntegerField(blank=True, null=True)
